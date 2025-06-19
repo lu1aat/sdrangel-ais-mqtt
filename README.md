@@ -12,15 +12,13 @@ Configure SDR Angel to stream AIS packets in NMEA format using UDP:
 - Change format to `NMEA`, check that address is `127.0.0.1` and port `9999`.
 - Check `UDP` checkbox.
 
-Demodulator is ready on SDRAngel for sdrangel-ais-mqtt to connect.
+Demodulator is ready on SDRAngel for `sdrangel-ais-mqtt` to connect.
 
 ## sdrangel-ais-mqtt
 
-Configure MQTT broker and topic.
+Get AIS data from SDRAngel running in `127.0.0.1` on port `9999` and publish in MQTT broker `localhost` topic `packets`:
 
-Run script with `python3 sdrangel-ais-mqtt.py`:
-
-```python
+```bash
 $ python3 sdrangel-ais-mqtt.py --mqtt-host test.mosquitto.org --mqtt-topic aispacketstopic
 2025-06-16 20:56:20,133 - INFO - UDP socket bound to 127.0.0.1:9999 for node node-montevideo-1
 2025-06-16 20:56:20,756 - INFO - Connected to MQTT broker at test.mosquitto.org:1883
@@ -29,6 +27,12 @@ $ python3 sdrangel-ais-mqtt.py --mqtt-host test.mosquitto.org --mqtt-topic aispa
 2025-06-16 20:56:22,599 - DEBUG - Published: {"raw": "!AIVDM,1,1,,,1;Np@Rh000sw4;5d1UtMuGb`08=9,0*22", "node": "node-montevideo-1"}
 2025-06-16 20:56:26,437 - DEBUG - Received from node-montevideo-1: b'!AIVDM,1,1,,,1;Np@RhP@0sw4;7d1UtMuGbf06sP,0*1f\r\n'
 2025-06-16 20:56:26,437 - DEBUG - Published: {"raw": "!AIVDM,1,1,,,1;Np@RhP@0sw4;7d1UtMuGbf06sP,0*1f", "node": "node-montevideo-1"}
+```
+
+Run over two decoders, usefull to do RX on both AIS frecuencies:
+
+```bash
+python3 sdrangel-ais-mqtt.py --mqtt-host test.mosquitto.org --mqtt-topic ais/data --ais-servers '[{"name":"node1","host":"127.0.0.1","port":9999},{"name":"node2","host":"127.0.0.1","port":9998}]'
 ```
 
 ## MQTT
